@@ -1,0 +1,11 @@
+INSERT INTO video_game_sales SELECT * FROM url('https://raw.githubusercontent.com/dmitrii12334/clickhouse/main/vgsale', CSVWithNames, 'Rank UInt32,
+    Name String,
+    Platform String,
+    Year String,
+    Genre String,
+    Publisher String,
+    NA_Sales Float32,
+    EU_Sales Float32,
+    JP_Sales Float32,
+    Other_Sales Float32,
+    Global_Sales Float32');
