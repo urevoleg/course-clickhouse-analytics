@@ -2,7 +2,7 @@ CREATE TABLE kinopoisk_parsing_result (
     id UInt32,
     search_item String,
     search_url String,
-    film_id UInt32,
+    film_id UInt32orNull,
     film_url String,
     film_name String,
     production_year String,

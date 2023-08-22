@@ -1,5 +1,5 @@
-INSERT INTO kinopoisk_parsing_result SELECT * FROM url('https://raw.githubusercontent.com/urevoleg/course-clickhouse-analytics/main/data/kinopoisk_parsing.csv', CSVWithNames,
-'id UInt32,
+INSERT INTO kinopoisk_parsing_result
+SELECT * FROM file('/var/lib/clickhouse/user_files/kinopoisk_parsing_clear.csv', CSV, 'id UInt32,
     search_item String,
     search_url String,
     film_id UInt32,
