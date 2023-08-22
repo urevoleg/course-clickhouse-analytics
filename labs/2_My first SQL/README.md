@@ -73,16 +73,44 @@ INSERT INTO video_game_sales SELECT * FROM url('https://raw.githubusercontent.co
 Создаем таблицу:
 ```sql
 CREATE TABLE kinopoisk_parsing_result (
-    Rank UInt32,
-    Name String,
-    Platform String,
-    Year String,
-    Genre String,
-    Publisher String,
-    NA_Sales Float32,
-    EU_Sales Float32,
-    JP_Sales Float32,
-    Other_Sales Float32,
-    Global_Sales Float32
-) ENGINE = Log
+    id UInt32,
+    search_item String,
+    search_url String,
+    film_id UInt32,
+    film_url String,
+    film_name String,
+    production_year String,
+    country String,
+    genre String,
+    director String,
+    screenwriter String,
+    operator String,
+    compositor String,
+    painter String,
+    mount String,
+    budget String,
+    box_office_usa String,
+    box_office_world String,
+    box_office_russia String,
+    rating_kp_top Float,
+    marks_amount_kinopoisk String,
+    rating_kp_pos String,
+    rating_kp_neu String,
+    rating_kp_neg String,
+    rating_imbd String,
+    marks_amount_imbd String,
+    release_world String,
+    release_russia String,
+    digital_release String,
+    checked_at String,
+    error String,
+    poster_link String,
+    film_descr String
+) ENGINE = Log;
+```
+
+Загружаем данные:
+
+```sql
+
 ```
