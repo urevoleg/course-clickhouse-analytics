@@ -414,3 +414,63 @@ limit 1;
 
 ![2-file_2019_06_19_11_42_59.jpg](..%2F..%2Fimg%2F2-file_2019_06_19_11_42_59.jpg)
 
+Существует два типа:
+- `Date` - хранит только дату
+- `DateTime` - хранит дату и время и можно еще с указанием таймзоны, например, `DateTime('Europe/Moscow')`
+
+В столбец типа `DateTime` можно вставлять дату в формате timestamp (123456789) или текст формата `2020-02-01 01:01:01` - 
+распарсится само. Сложные текстовые форматы вставляются строкой, есть отдельные функции для пасинга.
+
+Например, одна из фукнций для парсинга:
+- `parseDateTimeBestEffort`
+
+Также существует множество функций для работы с различными периодами (день, год) и разницами дат:
+- `toYear` - вернет год
+- `toStartOfWeek` - преобразует дату к началу недели, по-умолчанию, возвращает дату воскресенья, если необходим понедельник, то
+пишем `toStartOfWeek(date_columns, 1)`
+- для вывода текущей даты используйте `now()`, дня `today()`
+- для разницы дат `date_diff`
+
+
+### Tasks
+
+1.
+```
+В финансовом отчете Google Play есть таблица earnings она хранит список транзакций 
+по каждой покупке, однако время и дата в данной таблице хранятся не в самом удобном виде.
+
+Формат ответа:
+В качестве ответа приведите transaction_id с самой большой датой, 
+отсортируйте в порядке убывания по дате, первая строка будет ответом.
+```
+
+![datetime_tasks_parse.png](..%2F..%2Fimg%2Fdatetime_tasks_parse.png)
+
+
+Создаем таблицу для данных:
+
+```sql
+CREATE TABLE transactions_log (
+    transaction_id String,
+    transaction_date String,
+    transaction_time String,
+    tax_type String,
+    transaction_type String,
+    refund_type String,
+    product_name String,
+    product_id String
+) ENGINE = Log;
+```
+
+Заполняем данными - выполняем скрипт [script_1_2_2.sql](sql%2Fstaging%2Fscript_1_2_2.sql)
+
+Тестовая VIEW
+```sql
+create view transactions_log_view as select * from transactions_log order by transaction_id limit 50;
+```
+
+Проверка тестом:
+![datetime_google_play_task.png](..%2F..%2Fimg%2Fdatetime_google_play_task.png)
+
+Скрипт ответа [task_datetime_parse_answer.sql](sql%2Fstaging%2Ftask_datetime_parse_answer.sql)
+
