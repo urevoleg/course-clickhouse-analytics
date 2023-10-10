@@ -1,4 +1,4 @@
-# Writing first SQL queries
+# Chapter 2 - Writing first SQL queries
 
 ## Наливаем данных
 

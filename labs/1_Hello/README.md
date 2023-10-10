@@ -1,4 +1,4 @@
-# Greating with clickhouse
+# Chapter 1 - Greating with clickhouse
 
 1. Installation
 
