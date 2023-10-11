@@ -4,6 +4,12 @@
 
 [Link to instruction]()
 
+или запускаем docker:
+
+```
+docker run -d --name clickhouse-server -e CLICKHOUSE_USER=clickadmin -e CLICKHOUSE_PASSWORD=aLpjr5HMq -p 8123:8123 -p 9000:9000 --ulimit nofile=262144:262144 yandex/clickhouse-server
+```
+
 2. Connect to `clickhouse-server`
 
 Use various clients:
