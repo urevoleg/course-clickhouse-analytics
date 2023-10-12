@@ -203,3 +203,71 @@ First Payment - до этой даты не было платежей.
 Обычно это делается с помощью математических моделей, например, модели регрессии. 
 
 
+Данные для прогнозирования LTV [data_ltv_forecast.sql](sql%2Fmigrations%2Fdata_ltv_forecast.sql)
+
+1. Тк дни могут быть не все, то необходимо сгенерировать каждый день жизни когорты от 1 до N
+
+Исходные данные (для когорты 2 нет дней 1, 4, 6 и др):
+
+![ltv_raw_data.png](..%2F..%2Fimg%2Fltv_raw_data.png)
+
+
+2. Генерим все дни:
+
+![ltv_data_ml.png](..%2F..%2Fimg%2Fltv_data_ml.png)
+
+3. Для прогнозирования необходимо свернуть данные в массив (чтобы не было 0, при сворачивании используется arrayCumSum
+
+```sql
+SELECT cohort,
+       groupArray(DAY) AS X, -- сворачиваем в массив
+       arrayCumSum(groupArray(value)) AS y -- считаем накопительную выручку
+FROM  data_ml
+group by cohort;
+```
+
+![ltv_arrays.png](..%2F..%2Fimg%2Fltv_arrays.png)
+
+
+4. Далее применяется логарифмирование, чтобы линеаризовать зависимость, формируется массив для прогнозирования:
+
+```sql
+CREATE VIEW predict_ml AS
+SELECT cohort,
+       groupArray(DAY) AS X,
+       arrayCumSum(groupArray(value)) AS y,
+       arrayMap(x -> ln(x + 2),X) AS X_ln, -- формула по которой считаем, можно задать любую другую
+       arrayReduce('simpleLinearRegression', X_ln, y) AS coef, -- прогнозирвоание с помощью простой линейной регрессии
+
+       /* Все последующие преобразования нужны для прогноза выручки на N день */
+       length(X_ln) AS count_days, -- Считаем количество дней
+
+       arrayMap(x -> ln(x + 2), range(length(X_ln) + 30)) AS days_predict, -- Применяем функцию к данным + 30 дней,
+
+       tupleElement(coef, 1) AS coef_a,
+       tupleElement(coef, 2) AS coef_b,
+       arrayMap(x -> x * coef_a + coef_b, days_predict) AS array_predict
+FROM  data_ml
+group by cohort;
+```
+
+5. Чтобы развернуть данные из массива:
+
+```sql
+SELECT cohort,
+       arrayJoin(range(count_days + 30)) AS index_days, -- Формируем список из 30 дней
+       arrayElement(array_predict, index_days + 1) AS predict, -- Извлекаем из полчившегося массива ДНИ
+       arrayElement(y, index_days + 1) AS revenue -- Извлекаем из полчившегося массива ВЫРУЧКА
+FROM predict_ml
+```
+
+Смотрим на фактические значения и прогноз:
+
+![ltv_forecast_compare.png](..%2F..%2Fimg%2Fltv_forecast_compare.png)
+
+Видно, что различия существенные, но для простой прикидки достаточно (так сказать, чтобы не промахнуться на километр))
+
+Строим график:
+
+![ltv_forecast_plot.png](..%2F..%2Fimg%2Fltv_forecast_plot.png)
+
