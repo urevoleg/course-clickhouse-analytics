@@ -13,5 +13,8 @@
 [Tap](https://github.com/urevoleg/course-clickhouse-analytics/tree/main/labs/3_Analytics)
 
 ## 💻 4. Chapter 4 (Base of CS)
+[Tap](https://github.com/urevoleg/course-clickhouse-analytics/tree/main/labs/4_CS)
+
+## 🛢 5. Chapter 5 (Store Engines)
 [Tap]()
 
