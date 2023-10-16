@@ -271,3 +271,58 @@ FROM predict_ml
 
 ![ltv_forecast_plot.png](..%2F..%2Fimg%2Fltv_forecast_plot.png)
 
+### Tasks
+
+В данном задании нужно адаптировать данный запрос к нашим данным, воспользуйтесь таблицами login и finance. 
+Для этого, посчитайте прогноз на 50 день жизни когорты для пользователей зарегистрировавшихся в эти дни: 2023-01-01, 2023-01-02, 2023-01-03
+
+В качестве ответа предоставьте SQL запрос.
+
+Запрос подготавливающий данные в виде `когорта-lifetime-ltv`
+
+```postgres-sql
+SELECT first_reg_date, 
+			   lifetime,
+			   uniq(uid) AS users,
+			   sum(price_usd) AS revenue
+		FROM 
+			(select *,
+				   date_diff('day', first_reg_date, toDate(event_time)) + 1 AS lifetime -- вычисление lifetime
+			from 
+				-- JOIN события + когорта
+					(--объединение login + finance
+				    SELECT
+				        event_time
+				        , 'login' as event_type
+				        , uid
+				        , 0 as price_usd
+				    FROM login
+				    UNION ALL
+				    SELECT
+				        event_time
+				        , 'finance' as event_type
+				        , uid
+				        , revenue_usd as price_usd
+				    FROM finance
+				    WHERE is_test = 0) t1
+				any left join (SELECT uid,
+				                     min(toDate(event_time)) as first_reg_date
+				              FROM login
+				              GROUP BY uid) t2
+				using uid
+				WHERE first_reg_date IN ('2023-01-01', '2023-01-02', '2023-01-03')
+				ORDER BY first_reg_date, lifetime)
+		GROUP BY first_reg_date, lifetime
+		ORDER BY first_reg_date, lifetime
+```
+
+И важная деталь, в момент схлопывания данные в массивы (для прогнозирования) идет расчет LTV:
+
+```postgres-sql
+arrayMap(x -> x / max(users), groupArrayMovingSum(revenue)) AS y, --расчет LTV=CumRevenue / cohort_size
+```
+
+Полное решение [task_3_4_1_ltv_forecast.sql](sql%2Fstaging%2Ftask_3_4_1_ltv_forecast.sql)
+
+
+![ltv_forecast_meme.png](..%2F..%2Fimg%2Fltv_forecast_meme.png)

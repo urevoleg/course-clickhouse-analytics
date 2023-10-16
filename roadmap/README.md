@@ -30,7 +30,8 @@
 
 Загрузка и анализа данных Нью-Йоркского такси (~2млн cтрок).
 
-4. AWS Quikly course for redshift
-https://explore.skillbuilder.aws/learn/course/100/play/513/best-practices-for-data-warehousing-with-amazon-redshift
+5. Yourself lab with dbt and click - 🔥
 
-6. Yourself lab with dbt and click - 🔥
+[dbt-clickhouse](https://github.com/ClickHouse/dbt-clickhouse)
+
+[Integrating dbt and ClickHouse](https://clickhouse.com/docs/en/integrations/dbt) official by clickhouse.com
