@@ -10,7 +10,7 @@
 [Tap](https://github.com/urevoleg/course-clickhouse-analytics/tree/main/labs/2_My%20first%20SQL)
 
 ## 📈 3. Chapter 3 (Retention, Churn, LTV (forecasting))
-[Tap]()
+[Tap](https://github.com/urevoleg/course-clickhouse-analytics/tree/main/labs/3_Analytics)
 
 ## 💻 4. Chapter 4 (Base of CS)
 [Tap]()
