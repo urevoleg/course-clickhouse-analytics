@@ -70,7 +70,8 @@ INSERT INTO video_game_sales SELECT * FROM url('https://raw.githubusercontent.co
 ### И еще немного кастомных данных
 3. Kinopoisk Parsing
 
-3.1 [Download data](https://github.com/urevoleg/course-clickhouse-analytics/tree/main/data)
+3.1 [Download data](https://github.com/urevoleg/course-clickhouse-analytics/tree/main/data)\
+
 3.2 Копируем данные в папку `/var/lib/clickhouse/user_files` (clickhouse поднят в докере)
 
 Создаем таблицу:

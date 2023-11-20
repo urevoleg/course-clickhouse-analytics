@@ -55,7 +55,6 @@
 ![nested_loop.png](..%2F..%2Fimg%2Fnested_loop.png)
 
 Есть логические JOIN:
-
 1. Inner
 2. Left\Right\Full Outer
 3. Cross
